@@ -52,8 +52,6 @@ class RegistroController
         $data = json_decode(file_get_contents("php://input"), true);
         $id = $data['id'] ?? null;
 
-        var_dump($id);
-
         if ($id !== null) {
             include './Model/RegistroModel.php';
             $model = new RegistroModel();
@@ -63,7 +61,6 @@ class RegistroController
             $model->delete();
 
             // Optionally, redirect or send a response indicating success
-            echo json_encode(['success' => true]);
             echo '<script>window.location.href = "/";</script>';
 
             exit();

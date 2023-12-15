@@ -110,16 +110,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
-        // Adiciona um manipulador de eventos para cada imagem
-        // document.querySelectorAll('img').forEach(function(img) {
-        //     img.addEventListener('click', function() {
-        //         // Obtém o ID da imagem clicada
-        //         var id = img.id;
-        //         console.log('Clicou na imagem com ID ' + id);
-        //     });
-        // });
-
-
+    
         $(document).ready(function() {
             $('input[name="numero_telefone"]').mask('(00) 0000-0000');
             $('input[name="numero_celular"]').mask('(00) 00000-0000');
@@ -152,7 +143,7 @@
                         contentType: 'application/json', // Especifique o tipo de conteúdo como JSON
                         success: function(response) {
                             // Aqui você pode lidar com a resposta do servidor
-                            console.log(response);
+                            location.reload();
                         },
                         error: function(error) {
                             console.log('Erro na requisição AJAX DELETE:', error);

@@ -43,6 +43,7 @@ class RegistroModel{
         $dao = new RegistroDAO();
         $dao -> delete($this->pessoa_id);
 
+        $this -> registro = $dao -> select();
     }
 
 }
