@@ -13,7 +13,10 @@ switch ($url) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Se o método de requisição for POST, chame o método save
             RegistroController::save();
-        }else {
+        }else if($_SERVER['REQUEST_METHOD'] === 'DELETE'){
+            RegistroController::delete();
+        }
+        else {
             // Se não, chame a página principal
             RegistroController::pageHtmlAlphacode();
         }

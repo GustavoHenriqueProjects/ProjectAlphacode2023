@@ -45,4 +45,32 @@ class RegistroController
 
     exit();
     }
+
+    public static function delete()
+    {
+        // Verifique se o ID está presente na solicitação DELETE
+        $data = json_decode(file_get_contents("php://input"), true);
+        $id = $data['id'] ?? null;
+
+        var_dump($id);
+
+        if ($id !== null) {
+            include './Model/RegistroModel.php';
+            $model = new RegistroModel();
+
+            // Set the ID in the model and call the delete method
+            $model->pessoa_id = $id;
+            $model->delete();
+
+            // Optionally, redirect or send a response indicating success
+            echo json_encode(['success' => true]);
+            echo '<script>window.location.href = "/";</script>';
+
+            exit();
+        } else {
+            // Handle invalid or missing ID
+            echo json_encode(['error' => 'Invalid or missing ID']);
+            exit();
+        }
+    }
 }

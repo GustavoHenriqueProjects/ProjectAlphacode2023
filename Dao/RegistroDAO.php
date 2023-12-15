@@ -97,4 +97,27 @@ class RegistroDAO
             die();
         }
     }
+
+    public function delete($pessoa_id)
+    {
+        try {
+            // Delete from tbl_notificacao
+            $stmt = $this->conexao->prepare("DELETE FROM tbl_notificacao WHERE pessoa_id = :pessoa_id");
+            $stmt->bindParam(':pessoa_id', $pessoa_id);
+            $stmt->execute();
+    
+            // Delete from tbl_contato
+            $stmt = $this->conexao->prepare("DELETE FROM tbl_contato WHERE pessoa_id = :pessoa_id");
+            $stmt->bindParam(':pessoa_id', $pessoa_id);
+            $stmt->execute();
+    
+            // Delete from tbl_pessoa
+            $stmt = $this->conexao->prepare("DELETE FROM tbl_pessoa WHERE id = :pessoa_id");
+            $stmt->bindParam(':pessoa_id', $pessoa_id);
+            $stmt->execute();
+        } catch (Throwable $error) {
+            echo "Ocorreu o seguinte erro durante a exclusão: {$error->getMessage()}";
+            die();
+        }
+    }
 }

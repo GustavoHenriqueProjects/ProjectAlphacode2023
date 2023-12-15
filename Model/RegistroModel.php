@@ -14,12 +14,13 @@ class RegistroModel{
     public $enviar_notificacao_sms;
     public $enviar_notificacao_email;
 
+    public $pessoa_id;
+
     public $registro;
 
     public function save() 
     {
         include './Dao/RegistroDao.php';
-
         $dao = new RegistroDAO();
 
         $dao->insert($this);
@@ -34,6 +35,14 @@ class RegistroModel{
         $dao = new RegistroDAO();
 
         $this -> registro = $dao -> select();
+    }
+
+    public function delete()
+    {
+        include './Dao/RegistroDAO.php';
+        $dao = new RegistroDAO();
+        $dao -> delete($this->pessoa_id);
+
     }
 
 }

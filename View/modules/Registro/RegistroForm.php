@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../../../Assets/css/header.css">
     <link rel="stylesheet" href="../../../Assets/css/main.css">
     <link rel="stylesheet" href="../../../Assets/css/formRegister.css">
+    <link rel="stylesheet" href="../../../Assets/css/tabelaRegistro.css">
     <title>Alphacode</title>
 </head>
 
@@ -23,7 +24,7 @@
     </header>
     <main>
         <form method="POST" action="/" id="registroForm">
-            <div class="row mb-4">
+            <div class="row mb-5">
                 <div class="col-md-6">
                     <label for="nome">Nome completo</label>
                     <input type="text" name="nome" class="form-control bt-4 small-input" placeholder="Ex.: Letícia Pacheco dos Santos" required>
@@ -33,7 +34,7 @@
                     <input type="date" name="data_nascimento" class="form-control" placeholder="Ex.: 03/10/2003" required>
                 </div>
             </div>
-            <div class="row mb-4">
+            <div class="row mb-5">
                 <div class="col-md-6">
                     <label for="email">E-mail</label>
                     <input type="email" name="email" class="form-control" placeholder="Ex.: leticia@gmail.com" required>
@@ -43,7 +44,7 @@
                     <input type="text" name="profissao" class="form-control" placeholder="Ex.: Desenvolvedor Web" required>
                 </div>
             </div>
-            <div class="row mb-4">
+            <div class="row mb-5">
                 <div class="col-md-6">
                     <label for="telefone">Telefone para contato</label>
                     <input type="tel" name="numero_telefone" class="form-control" placeholder="Ex.: (11) 4033-2019" required>
@@ -72,37 +73,53 @@
             <button type="submit" class="btn btn-primary float-end">Cadastrar contato</button>
         </form>
 
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr class="th">
-                    <th>Nome</th>
-                    <th>Data de nascimento</th>
-                    <th>E-mail</th>
-                    <th>Celular para contato</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (isset($model->registro) && is_array($model->registro)) : ?>
-                    <?php foreach ($model->registro as $item) : ?>
-                        <tr class="td">
-                            <td><?= $item->nome ?></td>
-                            <td><?= $item->data_nascimento ?></td>
-                            <td><?= $item->email ?></td>
-                            <td><?= $item->numero_celular ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else : ?>
-                    <tr>
-                        <td colspan="4">No records found</td>
+        <div class="container_registro">
+            <table class="table table-bordered table-striped text-center">
+                <thead>
+                    <tr class="th">
+                        <th style="background-color: #068ED0; color: white; ">Nome</th>
+                        <th style="background-color: #068ED0; color: white;">Data de nascimento</th>
+                        <th style="background-color: #068ED0; color: white;">E-mail</th>
+                        <th style="background-color: #068ED0; color: white;">Celular para contato</th>
+                        <th style="background-color: #068ED0; color: white;">Editar</th>
+                        <th style="background-color: #068ED0; color: white;">Excluir</th>
                     </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php if (isset($model->registro) && is_array($model->registro)) : ?>
+                        <?php foreach ($model->registro as $item) : ?>
+                            <tr class="td">
+                                <td><?= $item->nome ?></td>
+                                <td><?= $item->data_nascimento ?></td>
+                                <td><?= $item->email ?></td>
+                                <td><?= $item->numero_celular ?></td>
+                                <td><img id="<?= $item->pessoa_id ?>" src="../../../Assets/images/editar.png" alt="editar"></td>
+                                <td><img id="<?= $item->pessoa_id ?>" class="excluir" src="../../../Assets/images/excluir.png" alt="excluir"></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else : ?>
+                        <tr>
+                            <td colspan="4">No records found</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
+        // Adiciona um manipulador de eventos para cada imagem
+        // document.querySelectorAll('img').forEach(function(img) {
+        //     img.addEventListener('click', function() {
+        //         // Obtém o ID da imagem clicada
+        //         var id = img.id;
+        //         console.log('Clicou na imagem com ID ' + id);
+        //     });
+        // });
+
+
         $(document).ready(function() {
             $('input[name="numero_telefone"]').mask('(00) 0000-0000');
             $('input[name="numero_celular"]').mask('(00) 00000-0000');
@@ -114,7 +131,37 @@
                     }
                 }
             });
-        });      
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll('.excluir').forEach(function(img) {
+            img.addEventListener('click', function() {
+                // Obtém o ID da imagem clicada
+                let id = img.id;
+
+                let confirmacao = confirm('Deseja realmente excluir?')
+
+                if (confirmacao) {
+                    $.ajax({
+                        url: '/',
+                        type: 'DELETE',
+                        data: JSON.stringify({
+                            id: Number(id)
+                        }), // Inclua o ID no corpo da requisição
+                        contentType: 'application/json', // Especifique o tipo de conteúdo como JSON
+                        success: function(response) {
+                            // Aqui você pode lidar com a resposta do servidor
+                            console.log(response);
+                        },
+                        error: function(error) {
+                            console.log('Erro na requisição AJAX DELETE:', error);
+                        }
+                    });
+                }
+            });
+
+        });
     </script>
 </body>
 
