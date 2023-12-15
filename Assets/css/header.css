@@ -1,0 +1,18 @@
+header{
+    grid-area: header;
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    background-color: #068ED0;
+    color: white;
+}
+
+h1{
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.3em;
+}
+
+#logo{
+    padding-left: 1%;
+    height: 100%;
+}
