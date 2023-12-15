@@ -64,4 +64,37 @@ class RegistroDAO
             die();
         }
     }
+
+    public function select()
+    {
+        try {
+            $sql = "
+                SELECT
+                    pessoa.id AS pessoa_id,
+                    pessoa.nome,
+                    pessoa.email,
+                    pessoa.data_nascimento,
+                    pessoa.profissao,
+                    contato.numero_telefone,
+                    contato.numero_celular,
+                    contato.possui_whatsapp,
+                    notificacao.enviar_notificacao_sms,
+                    notificacao.enviar_notificacao_email
+                FROM
+                    tbl_pessoa pessoa
+                LEFT JOIN
+                    tbl_contato contato ON pessoa.id = contato.pessoa_id
+                LEFT JOIN
+                    tbl_notificacao notificacao ON pessoa.id = notificacao.pessoa_id
+            ";
+    
+            $stmt = $this->conexao->prepare($sql);
+            $stmt->execute();
+    
+            return $stmt->fetchAll(PDO::FETCH_CLASS);
+        } catch (Throwable $error) {
+            echo "Ocorreu o seguinte erro durante a seleção: {$error->getMessage()}";
+            die();
+        }
+    }
 }

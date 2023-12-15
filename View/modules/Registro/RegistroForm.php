@@ -22,7 +22,7 @@
         <h1>Cadastro de contatos</h1>
     </header>
     <main>
-        <form action="/form/save" method="post">
+        <form method="POST" action="/" id="registroForm">
             <div class="row mb-4">
                 <div class="col-md-6">
                     <label for="nome">Nome completo</label>
@@ -71,6 +71,33 @@
             </div>
             <button type="submit" class="btn btn-primary float-end">Cadastrar contato</button>
         </form>
+
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr class="th">
+                    <th>Nome</th>
+                    <th>Data de nascimento</th>
+                    <th>E-mail</th>
+                    <th>Celular para contato</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (isset($model->registro) && is_array($model->registro)) : ?>
+                    <?php foreach ($model->registro as $item) : ?>
+                        <tr class="td">
+                            <td><?= $item->nome ?></td>
+                            <td><?= $item->data_nascimento ?></td>
+                            <td><?= $item->email ?></td>
+                            <td><?= $item->numero_celular ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else : ?>
+                    <tr>
+                        <td colspan="4">No records found</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -87,7 +114,7 @@
                     }
                 }
             });
-        });
+        });      
     </script>
 </body>
 

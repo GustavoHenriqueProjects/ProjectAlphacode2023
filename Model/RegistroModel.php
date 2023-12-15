@@ -14,11 +14,26 @@ class RegistroModel{
     public $enviar_notificacao_sms;
     public $enviar_notificacao_email;
 
-    public function save() {
+    public $registro;
+
+    public function save() 
+    {
         include './Dao/RegistroDao.php';
 
         $dao = new RegistroDAO();
 
         $dao->insert($this);
+        
+        $this -> registro = $dao -> select();
     }
+
+    public function getAll()
+    {
+        include './Dao/RegistroDAO.php';
+
+        $dao = new RegistroDAO();
+
+        $this -> registro = $dao -> select();
+    }
+
 }

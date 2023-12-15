@@ -8,13 +8,18 @@ include './Controller/RegistroController.php';
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 print_r($url);
 
-switch($url)
-{
+switch ($url) {
     case '/':
-        RegistroController::pageHtmlAlphacode();
-    break;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Se o método de requisição for POST, chame o método save
+            RegistroController::save();
+        }else {
+            // Se não, chame a página principal
+            RegistroController::pageHtmlAlphacode();
+        }
+        break;
 
-    case '/form/save':
-        RegistroController::save();
-    break;
+    default:
+        echo "Rota não encontrada";
+        break;
 }
