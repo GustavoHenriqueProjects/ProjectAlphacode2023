@@ -25,3 +25,9 @@ label{
     background-color: #068ED0;
     color: #fff;
   }
+
+  @media(max-width: 500px){
+    form{
+      padding-right: 0px;
+    }
+}

@@ -90,7 +90,7 @@
                         <?php foreach ($model->registro as $item) : ?>
                             <tr class="td">
                                 <td><?= $item->nome ?></td>
-                                <td><?= $item->data_nascimento ?></td>
+                                <td><?= date('d/m/Y', strtotime($item->data_nascimento)) ?></td>
                                 <td><?= $item->email ?></td>
                                 <td><?= $item->numero_celular ?></td>
                                 <td><img id="<?= $item->pessoa_id ?>" src="../../../Assets/images/editar.png" alt="editar"></td>
@@ -124,7 +124,6 @@
             });
         });
     </script>
-
     <script>
         document.querySelectorAll('.excluir').forEach(function(img) {
             img.addEventListener('click', function() {
@@ -139,10 +138,9 @@
                         type: 'DELETE',
                         data: JSON.stringify({
                             id: Number(id)
-                        }), // Inclua o ID no corpo da requisição
-                        contentType: 'application/json', // Especifique o tipo de conteúdo como JSON
+                        }), 
+                        contentType: 'application/json', 
                         success: function(response) {
-                            // Aqui você pode lidar com a resposta do servidor
                             location.reload();
                         },
                         error: function(error) {

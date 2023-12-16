@@ -5,3 +5,9 @@
 .texto-centralizado {
     text-align: center;
 }
+
+@media(max-width: 500px){
+    .container_registro{
+        padding: 0px;
+    }
+}

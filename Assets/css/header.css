@@ -5,6 +5,11 @@ header{
     gap: 40px;
     background-color: #068ED0;
     color: white;
+    width: 100%;
+    top: 0;
+    left: 0;
+    height: 10%;
+    position: fixed;
 }
 
 h1{
@@ -15,4 +20,13 @@ h1{
 #logo{
     padding-left: 1%;
     height: 100%;
+}
+
+@media(max-width: 500px){
+    header{
+        height: 6%;
+    }
+#logo{
+    height: 80%;
+}
 }
