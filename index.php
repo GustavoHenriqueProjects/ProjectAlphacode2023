@@ -11,7 +11,6 @@ print_r($url);
 switch ($url) {
     case '/':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Se o método de requisição for POST, chame o método save
             RegistroController::save();
         }else if($_SERVER['REQUEST_METHOD'] === 'DELETE'){
             RegistroController::delete();
