@@ -16,7 +16,7 @@ class RegistroDAO
 
             $this->conexao = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
         } catch (Throwable $error) {
-            echo "Ocorreu o sequinte erro: {$error -> getMessage()}";
+            echo "Ocorreu o sequinte erro: {$error->getMessage()}";
 
             die();
         }
@@ -87,13 +87,49 @@ class RegistroDAO
                 LEFT JOIN
                     tbl_notificacao notificacao ON pessoa.id = notificacao.pessoa_id
             ";
-    
+
             $stmt = $this->conexao->prepare($sql);
             $stmt->execute();
-    
+
             return $stmt->fetchAll(PDO::FETCH_CLASS);
         } catch (Throwable $error) {
             echo "Ocorreu o seguinte erro durante a seleção: {$error->getMessage()}";
+            die();
+        }
+    }
+
+    public function patchRegister(RegistroModel $model)
+    {
+        try {
+
+            $stmt = $this->conexao->prepare("
+                UPDATE tbl_pessoa
+                SET nome = :nome,
+                    data_nascimento = :data_nascimento,
+                    email = :email
+                WHERE id = :pessoa_id
+            ");
+
+            $stmt->bindParam(':pessoa_id', $model->pessoa_id);
+            $stmt->bindParam(':nome', $model->nome);
+            $stmt->bindParam(':data_nascimento', $model->data_nascimento);
+            $stmt->bindParam(':email', $model->email);
+            $stmt->execute();
+
+            $stmt = $this->conexao->prepare("
+                UPDATE tbl_contato
+                SET numero_celular = :numero_celular
+                WHERE pessoa_id = :pessoa_id
+            ");
+
+            $stmt->bindParam(':pessoa_id', $model->pessoa_id);
+            $stmt->bindParam(':numero_celular', $model->numero_celular);
+            $stmt->execute();
+
+            echo "Dados Recebidos para Atualização:";
+            print_r($model);
+        } catch (PDOException $error) {
+            echo "Ocorreu o seguinte erro durante a atualização da pessoa: {$error->getMessage()}";
             die();
         }
     }
@@ -105,12 +141,12 @@ class RegistroDAO
             $stmt = $this->conexao->prepare("DELETE FROM tbl_notificacao WHERE pessoa_id = :pessoa_id");
             $stmt->bindParam(':pessoa_id', $pessoa_id);
             $stmt->execute();
-    
+
             // Delete from tbl_contato
             $stmt = $this->conexao->prepare("DELETE FROM tbl_contato WHERE pessoa_id = :pessoa_id");
             $stmt->bindParam(':pessoa_id', $pessoa_id);
             $stmt->execute();
-    
+
             // Delete from tbl_pessoa
             $stmt = $this->conexao->prepare("DELETE FROM tbl_pessoa WHERE id = :pessoa_id");
             $stmt->bindParam(':pessoa_id', $pessoa_id);

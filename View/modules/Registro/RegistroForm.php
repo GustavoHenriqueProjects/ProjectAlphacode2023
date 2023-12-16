@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../../../Assets/css/formRegister.css">
     <link rel="stylesheet" href="../../../Assets/css/tabelaRegistro.css">
     <link rel="stylesheet" href="../../../Assets/css/footer.css">
+    <link rel="stylesheet" href="../../../Assets/css/editar.css">
     <title>Alphacode</title>
 </head>
 
@@ -94,7 +95,7 @@
                                 <td><?= date('d/m/Y', strtotime($item->data_nascimento)) ?></td>
                                 <td><?= $item->email ?></td>
                                 <td><?= $item->numero_celular ?></td>
-                                <td><img id="<?= $item->pessoa_id ?>" src="../../../Assets/images/editar.png" alt="editar"></td>
+                                <td><img id="<?= $item->pessoa_id ?>" class="editar" src="../../../Assets/images/editar.png" alt="editar"></td>
                                 <td><img id="<?= $item->pessoa_id ?>" class="excluir" src="../../../Assets/images/excluir.png" alt="excluir"></td>
                             </tr>
                         <?php endforeach; ?>
@@ -107,16 +108,44 @@
             </table>
         </div>
     </main>
+
+    <!-- Div para editar pessoa -->
+    <div id="editForm" class="d-none">
+        <label for="nome" class="form-label">Nome:</label>
+        <input type="text" id="update_nome" name="update_nome" class="form-control">
+        <br>
+        <label for="dataNascimento" class="form-label">Data de Nascimento:</label>
+        <input type="date" id="dataNascimento" name="dataNascimento" class="form-control">
+        <br>
+        <label for="email" class="form-label">Email:</label>
+        <input type="text" id="update_email" name="update_email" class="form-control">
+        <br>
+        <label for="celular" class="form-label">Celular:</label>
+        <input type="text" id="update_celular" name="update_celular" class="form-control">
+        <br>
+        <button id="salvarEdicao" class="btn btn-primary float-start">Salvar</button>
+        <button id="cancelarEdicao" class="btn btn-danger float-end">Cancelar</button>
+    </div>
+
     <footer></footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
     <script>
-    
         $(document).ready(function() {
-            $('input[name="numero_telefone"]').mask('(00) 0000-0000');
+            $('input[name="numero_telefone"]', ).mask('(00) 0000-0000');
             $('input[name="numero_celular"]').mask('(00) 00000-0000');
             $('input[name="email"]').mask("A", {
+                translation: {
+                    "A": {
+                        pattern: /[\w@\-.+]/,
+                        recursive: true
+                    }
+                }
+            });
+
+            $('input[name="update_celular"]').mask('(00) 00000-0000');
+            $('input[name="update_email"]').mask("A", {
                 translation: {
                     "A": {
                         pattern: /[\w@\-.+]/,
@@ -140,8 +169,8 @@
                         type: 'DELETE',
                         data: JSON.stringify({
                             id: Number(id)
-                        }), 
-                        contentType: 'application/json', 
+                        }),
+                        contentType: 'application/json',
                         success: function(response) {
                             location.reload();
                         },
@@ -152,6 +181,79 @@
                 }
             });
 
+        });
+    </script>
+    <script>
+        document.querySelectorAll('.editar').forEach(function(img) {
+            img.addEventListener('click', function() {
+
+                let idUser = img.id
+
+                // Encontrar a linha correspondente na tabela
+                let tr = img.closest('tr');
+
+                // Obtém os valores dos campos do item correspondente
+                let nome = tr.cells[0].innerText; // Nome
+                let dataNascimento = tr.cells[1].innerText; // Data de Nascimento
+                let email = tr.cells[2].innerText; // Email
+                let celular = tr.cells[3].innerText; // Celular
+
+                // Dividir a string em dia, mês e ano
+                let partesData = dataNascimento.split('/');
+                let dia = partesData[0];
+                let mes = partesData[1];
+                let ano = partesData[2];
+
+                let dataFormatada = `${ano}-${mes}-${dia}`;
+
+                // Preencher os campos do formulário de edição com os dados do item
+                document.getElementById('update_nome').value = nome;
+                document.getElementById('dataNascimento').value = dataNascimento;
+                document.getElementById('update_email').value = email;
+                document.getElementById('update_celular').value = celular;
+                document.getElementById('editForm').classList.remove('d-none')
+
+                document.getElementById('salvarEdicao').addEventListener('click', function() {
+                    // Obtém os valores dos campos de edição
+                    let nome = document.getElementById('update_nome');
+                    let data = document.getElementById('dataNascimento');
+                    let email = document.getElementById('update_email');
+                    let celular = document.getElementById('update_celular');
+
+                    if (nome.value !== '' || dataNascimento.value !== '' || email.value !== '' || celular.value !== '') {
+                        $.ajax({
+                            url: '/',
+                            type: 'PATCH',
+                            data: JSON.stringify({
+                                id: Number(idUser),
+                                nome: nome.value,
+                                dataNascimento: data.value !== '' ? data.value : dataFormatada,
+                                email: email.value,
+                                numero_celular: celular.value
+                            }),
+                            contentType: 'application/json',
+                            success: function(response) {
+                                location.reload()
+                            },
+                            error: function(error) {
+                                console.log('Erro na requisição AJAX UPDATE:', error);
+                            }
+                        });
+                    } else {
+                        window.alert('Atenção escolha um campo para atualizar ou cancele.')
+                    }
+                });
+            });
+        });
+
+        function formatarDataParaIngles(data) {
+            const partes = data.split('/');
+            const dataFormatada = `${partes[2]}-${partes[1]}-${partes[0]}`;
+            return dataFormatada;
+        }
+
+        document.getElementById('cancelarEdicao').addEventListener('click', function() {
+            document.getElementById('editForm').classList.add('d-none');
         });
     </script>
 </body>

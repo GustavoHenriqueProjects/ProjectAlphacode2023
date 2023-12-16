@@ -15,6 +15,8 @@ switch ($url) {
             RegistroController::save();
         }else if($_SERVER['REQUEST_METHOD'] === 'DELETE'){
             RegistroController::delete();
+        }else if($_SERVER['REQUEST_METHOD'] === 'PATCH'){
+           RegistroController::patch();
         }
         else {
             // Se não, chame a página principal

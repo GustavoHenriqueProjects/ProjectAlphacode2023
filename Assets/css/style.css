@@ -10,3 +10,19 @@ body{
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+.erro {
+    position: absolute;
+    color: red;
+    font-weight: bold;
+    background-color: #eaf7e3;
+    padding: 10px;
+    border-radius: 5px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: normal;
+    min-width: 320px;
+    max-width: 400px;
+    word-wrap: break-word;
+  }
