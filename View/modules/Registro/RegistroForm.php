@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="Projeto alphacode">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../../../Assets/css/reset.css">
     <link rel="stylesheet" href="../../../Assets/css/style.css">
@@ -101,7 +103,7 @@
                         <?php endforeach; ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="4">No records found</td>
+                            <td colspan="4">Nenhum dado encontrado.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -112,22 +114,29 @@
     <!-- Div para editar pessoa -->
     <div id="editForm" class="d-none">
         <label for="nome" class="form-label">Nome:</label>
-        <input type="text" id="update_nome" name="update_nome" class="form-control">
+        <input type="text" id="update_nome" name="update_nome" class="form-control" required>
         <br>
         <label for="dataNascimento" class="form-label">Data de Nascimento:</label>
         <input type="date" id="dataNascimento" name="dataNascimento" class="form-control">
         <br>
         <label for="email" class="form-label">Email:</label>
-        <input type="text" id="update_email" name="update_email" class="form-control">
+        <input type="text" id="update_email" name="update_email" class="form-control" required>
         <br>
         <label for="celular" class="form-label">Celular:</label>
-        <input type="text" id="update_celular" name="update_celular" class="form-control">
+        <input type="text" id="update_celular" name="update_celular" class="form-control" required>
         <br>
         <button id="salvarEdicao" class="btn btn-primary float-start">Salvar</button>
         <button id="cancelarEdicao" class="btn btn-danger float-end">Cancelar</button>
     </div>
 
-    <footer></footer>
+    <footer>
+        <p>Termos | Políticas</p>
+        <div class="text_img_footer">
+            <p>© Copyright 2022 | Desenvolvido por</p>
+            <img id="logo_footer" src="../../../Assets/images/logo_rodape_alphacode.png" alt="Logo rodape">
+        </div>
+        <p>©Alphacode IT Solutions 2022</p>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
@@ -219,6 +228,25 @@
                     let data = document.getElementById('dataNascimento');
                     let email = document.getElementById('update_email');
                     let celular = document.getElementById('update_celular');
+
+                    if (nome.value === '' || email.value === '' || celular.value === '') {
+                        window.alert('Atenção, não é permitido enviar um campo vazio com exceção da data.');
+                        return;
+                    }
+
+                    // Validação do e-mail
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email.value)) {
+                        window.alert('Por favor, insira um endereço de e-mail válido.');
+                        return;
+                    }
+
+                    // Validação do número de celular (assumindo um formato específico, por exemplo, 123-456-7890)
+                    const celularRegex = /^\(\d{2}\) \d{4,5}-\d{4}$/;
+                    if (!celularRegex.test(celular.value)) {
+                        window.alert('Por favor, insira um número de celular válido no formato (xx) xxxx-xxxxx.');
+                        return;
+                    }
 
                     if (nome.value !== '' || dataNascimento.value !== '' || email.value !== '' || celular.value !== '') {
                         $.ajax({

@@ -18,7 +18,6 @@ switch ($url) {
            RegistroController::patch();
         }
         else {
-            // Se não, chame a página principal
             RegistroController::pageHtmlAlphacode();
         }
         break;
