@@ -10,6 +10,11 @@ class RegistroController
         self::index();
     }
 
+    public static function erroRota()
+    {
+        include './View/modules/Registro/ErroRota.php';
+    }
+
     public static function index()
     {
         include './Model/RegistroModel.php';

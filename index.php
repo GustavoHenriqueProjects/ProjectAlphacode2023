@@ -23,6 +23,6 @@ switch ($url) {
         break;
 
     default:
-        echo "Rota não encontrada";
+        RegistroController::erroRota();
         break;
 }
